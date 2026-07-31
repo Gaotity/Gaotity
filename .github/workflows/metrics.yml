@@ -1,0 +1,37 @@
+name: Update README metrics
+
+on:
+  schedule:
+    - cron: "23 4 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  metrics:
+    runs-on: ubuntu-latest
+    steps:
+      # output_action: pull-request-squash natively implements the same
+      # verified pattern as grs.yml: branch commit via REST Contents API
+      # (GitHub-signed), PR, direct squash merge. Data fetching uses the
+      # scopeless METRICS_TOKEN PAT; committing uses the default GITHUB_TOKEN.
+      - uses: lowlighter/metrics@v3.34
+        with:
+          token: ${{ secrets.METRICS_TOKEN }}
+          filename: profile/metrics.svg
+          user: ${{ github.repository_owner }}
+          base: header, activity, community, repositories, metadata
+          output_action: pull-request-squash
+          plugin_isocalendar: yes
+          plugin_isocalendar_duration: full-year
+          plugin_languages: yes
+          plugin_languages_ignored: html, css, tex, makefile, dockerfile, shell
+          plugin_languages_limit: 6
+          plugin_habits: yes
+          plugin_habits_facts: yes
+          plugin_habits_charts: yes
+          plugin_achievements: yes
+          plugin_achievements_display: compact
+          config_timezone: Asia/Shanghai
