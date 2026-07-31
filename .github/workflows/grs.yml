@@ -12,7 +12,7 @@ permissions:
 env:
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   BRANCH: bot/readme-cards
-  CARD_PATHS: "profile/stats.svg profile/top-langs.svg"
+  CARD_PATHS: "profile/stats.svg"
 
 jobs:
   build:
@@ -34,18 +34,8 @@ jobs:
         uses: stats-organization/github-readme-stats-action@v2
         with:
           card: stats
-          options: username=${{ github.repository_owner }}&theme=transparent
+          options: username=${{ github.repository_owner }}
           path: profile/stats.svg
-          token: ${{ secrets.GITHUB_TOKEN }}
-          fail_on_error: "true"
-
-      - name: Generate top languages card
-        if: steps.gate.outputs.skip != 'true'
-        uses: stats-organization/github-readme-stats-action@v2
-        with:
-          card: top-langs
-          options: username=${{ github.repository_owner }}&layout=compact&langs_count=6&theme=transparent
-          path: profile/top-langs.svg
           token: ${{ secrets.GITHUB_TOKEN }}
           fail_on_error: "true"
 
